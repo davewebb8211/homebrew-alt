@@ -14,8 +14,9 @@ end
 
 class AvrGcc < Formula
   homepage 'http://gcc.gnu.org'
-  url 'http://ftp.gnu.org/gnu/gcc/gcc-4.6.1/gcc-4.6.1.tar.bz2'
-  md5 'c57a9170c677bf795bdc04ed796ca491'
+  # url 'http://ftp.gnu.org/gnu/gcc/gcc-4.6.1/gcc-4.6.1.tar.bz2'
+  url 'http://ftp.gnu.org/gnu/gcc/gcc-4.6.2/gcc-4.6.2.tar.bz2'
+  # md5 'c57a9170c677bf795bdc04ed796ca491'
 
   depends_on relative 'avr-binutils'
   depends_on 'gmp'
@@ -35,7 +36,7 @@ class AvrGcc < Formula
     # C++ PROGMEM bug in 49764: 
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=49764
     # Fixed in upstream cvs
-    DATA
+#    DATA
   end
 
   def install
@@ -90,27 +91,27 @@ class AvrGcc < Formula
   end
 end
 
-__END__
---- gcc-4.6.1/gcc/config/avr/avr.c	2011/07/04 12:21:45	175808
-+++ gcc-4.6.1/gcc/config/avr/avr.c	2011/07/04 12:28:02	175809
-@@ -5052,7 +5052,19 @@
-       && (TREE_STATIC (node) || DECL_EXTERNAL (node))
-       && avr_progmem_p (node, *attributes))
-     {
--      if (TREE_READONLY (node)) 
-+      tree node0 = node;
-+
-+      /* For C++, we have to peel arrays in order to get correct
-+         determination of readonlyness.  */
-+      
-+      do
-+        node0 = TREE_TYPE (node0);
-+      while (TREE_CODE (node0) == ARRAY_TYPE);
-+
-+      if (error_mark_node == node0)
-+        return;
-+      
-+      if (TYPE_READONLY (node0))
-         {
-           static const char dsec[] = ".progmem.data";
- 
+#__END__
+#--- gcc-4.6.2/gcc/config/avr/avr.c	2011/07/04 12:21:45	175808
+#+++ gcc-4.6.2/gcc/config/avr/avr.c	2011/07/04 12:28:02	175809
+#@@ -5052,7 +5052,19 @@
+#       && (TREE_STATIC (node) || DECL_EXTERNAL (node))
+#       && avr_progmem_p (node, *attributes))
+#     {
+#-      if (TREE_READONLY (node)) 
+#+      tree node0 = node;
+#+
+#+      /* For C++, we have to peel arrays in order to get correct
+#+         determination of readonlyness.  */
+#+      
+#+      do
+#+        node0 = TREE_TYPE (node0);
+#+      while (TREE_CODE (node0) == ARRAY_TYPE);
+#+
+#+      if (error_mark_node == node0)
+#+        return;
+#+      
+#+      if (TYPE_READONLY (node0))
+#         {
+#           static const char dsec[] = ".progmem.data";
+# 

@@ -2,6 +2,8 @@
 
 This is a try to get a MSP430 toolchain compile for OSX. 
 
+Inspirations from Fink (http://fink.cvs.sourceforge.net/fink/dists/10.4/unstable/main/finkinfo/10.4-EOL/devel/msp430-binutils.info?view=markup) and Wiki of mspgcc (http://sourceforge.net/apps/mediawiki/mspgcc/index.php?title=Install:fromsource)
+
 
 
 # Contents
